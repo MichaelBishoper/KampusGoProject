@@ -25,10 +25,12 @@ class ProfileActivity : ComponentActivity() {
         Log.d("KampusGo", "onCreate")
         val activity = this
         val name = intent.getStringExtra("name") ?: "Guest"
+        val npm = intent.getStringExtra("npm")?.takeIf { it.isNotBlank() } ?: "-"
         setContent() {
             KampusGoProjectTheme {
                 Column(modifier = Modifier.padding(24.dp)) {
                     Text(text = "Hello $name")
+                    Text(text = "NPM = $npm")
                     Button(onClick = {
                         val dial = Intent(Intent.ACTION_DIAL, Uri.parse("tel:0211234567"))
                         try {
@@ -42,6 +44,20 @@ class ProfileActivity : ComponentActivity() {
                         }
                     }) {
                         Text("Call Campus")
+                    }
+                    Button(onClick = {
+                        val sgu = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.sgu.ac.id"))
+                        try {
+                            activity.startActivity((sgu))
+                        } catch (e: ActivityNotFoundException) {
+                            Toast.makeText(
+                                activity,
+                                "No browser on this service",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }) {
+                        Text("Open Campus Website")
                     }
                 }
             }
